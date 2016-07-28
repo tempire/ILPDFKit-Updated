@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** The user display name from the PDF.  Called ToolTip in Adobe Acrobat
  *  */
-@property (nonatomic, strong) NSString *displayName;
+@property (nonatomic, strong, nullable) NSString *displayName;
 
 /**---------------------------------------------------------------------------------------
  * @name Updating Metrics
