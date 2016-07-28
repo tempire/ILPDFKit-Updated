@@ -31,7 +31,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = PDFWidgetColor;
+        self.backgroundColor = [ILPDFWidgetColor colorWithAlphaComponent:1];
         
         [self initializeControls];
     }
@@ -87,7 +87,7 @@
     }
     
     if (!value) {
-        self.backgroundColor = PDFWidgetColor;
+        self.backgroundColor = [ILPDFWidgetColor colorWithAlphaComponent:1];
         return;
     }
     
@@ -106,7 +106,7 @@
     UIImage *image = [UIImage imageWithData:data];
     
     CGFloat aspect = image.size.width / image.size.height;
-    CGSize size = [PDFFormSignatureField scaledSizeWithAspect:aspect boundingSize:frame.size];
+    CGSize size = [ILPDFFormSignatureField scaledSizeWithAspect:aspect boundingSize:frame.size];
     
     UIGraphicsPushContext(ctx);
     [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
