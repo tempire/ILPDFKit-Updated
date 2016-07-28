@@ -23,7 +23,7 @@
 #import "ILPDFFormSignatureField.h"
 #import <ILPDFKit/ILPDFKit.h>
 
-@implementation ILPDFFormSignatureField
+@implementation ILPDFFormSignatureField {
       NSString *_val;
       UIImageView *imageView;
 }
@@ -130,3 +130,5 @@
     
     return CGSizeMake(size.height * aspect, size.height);
 }
+
+@end
