@@ -24,6 +24,16 @@
 #import <ILPDFKit/ILPDFKit.h>
 
 @implementation ILPDFFormSignatureField
+      NSString *_val;
+      UIImageView *imageView;
+}
+
+#pragma mark - NSObject
+
+- (void)dealloc {
+      [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 #pragma mark - UIView
 
