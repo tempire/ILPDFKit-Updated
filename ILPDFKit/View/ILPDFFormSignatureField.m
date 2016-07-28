@@ -31,7 +31,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [ILPDFWidgetColor colorWithAlphaComponent:1];
+        self.backgroundColor = PDFWidgetColor;
         
         [self initializeControls];
     }
@@ -41,30 +41,10 @@
 -(void)initializeControls {
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSignatureView:)];
     [self addGestureRecognizer:tap];
-}
-
--(void)showSignatureView:(UITapGestureRecognizer *)tap {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center postNotificationName:@"showSignatureView" object:self];
-}
-
--(void)setValue:(NSString *)value {
-    for (UIView *view in self.subviews) {
-        [view removeFromSuperview];
-    }
     
-    if (!value) {
-        self.backgroundColor = ILPDFWidgetColor;
-        return;
-    }
-    
-    NSData *data = [[NSData alloc] initWithBase64EncodedString:value options:nil];
-    UIImage *image = [UIImage imageWithData:data];
-    
-    UIImageView *imageView = [[UIImageView alloc] init]; //WithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
+    imageView = [[UIImageView alloc] init]; //WithFrame:CGRectMake(0, 0, image.size.width, image.size.height)];
     [imageView setTranslatesAutoresizingMaskIntoConstraints:NO];
     imageView.contentMode = UIViewContentModeScaleAspectFit;
-    imageView.image = image;
     
     [self addSubview:imageView];
     [self addConstraints:@[
@@ -73,8 +53,70 @@
                            [NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0],
                            [NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:0]
                            ]];
-    
     [self layoutIfNeeded];
 }
 
-@end
+-(void)showSignatureView:(UITapGestureRecognizer *)tap {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center postNotificationName:@"showSignatureView" object:self];
+}
+
+-(void)setSignatureImage:(UIImage *)image {
+    if (image == nil) {
+        _val = nil;
+        
+        if (imageView.image != nil) {
+            [self.delegate widgetAnnotationValueChanged:self];
+        }
+        
+        return;
+    }
+    
+    NSData *data = UIImagePNGRepresentation(image);
+    NSString *string = [data base64EncodedStringWithOptions:nil];
+    _val = string;
+    
+    imageView.image = image;
+    
+    [self.delegate widgetAnnotationValueChanged:self];
+}
+
+-(void)setValue:(NSString *)value {
+    if (value == nil) {
+        [self setSignatureImage:nil];
+    }
+    
+    if (!value) {
+        self.backgroundColor = PDFWidgetColor;
+        return;
+    }
+    
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:value options:nil];
+    UIImage *image = [UIImage imageWithData:data];
+    [self setSignatureImage:image];
+}
+
+-(NSString *)value {
+    return _val;
+}
+
++(void)drawWithRect:(CGRect)frame context:(CGContextRef)ctx value:(NSString *)value {
+    if (value == nil) return;
+    NSData *data = [[NSData alloc] initWithBase64EncodedString:value options:nil];
+    UIImage *image = [UIImage imageWithData:data];
+    
+    CGFloat aspect = image.size.width / image.size.height;
+    CGSize size = [PDFFormSignatureField scaledSizeWithAspect:aspect boundingSize:frame.size];
+    
+    UIGraphicsPushContext(ctx);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIGraphicsPopContext();
+}
+
++(CGSize)scaledSizeWithAspect:(CGFloat)aspect boundingSize:(CGSize)size {
+    if (size.width / aspect <= size.height) {
+        return CGSizeMake(size.width, size.width / aspect);
+    }
+    
+    return CGSizeMake(size.height * aspect, size.height);
+}
