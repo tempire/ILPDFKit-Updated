@@ -30,7 +30,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = PDFWidgetColor;
+        self.backgroundColor = ILPDFWidgetColor;
         
         [self initializeControls];
     }
