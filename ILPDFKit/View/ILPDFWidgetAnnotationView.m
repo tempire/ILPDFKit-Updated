@@ -97,11 +97,11 @@
 - (void)resign {
 }
 
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated completion:(void(^)(BOOL finished))completion {
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated completion:(nullable void(^)(BOOL finished))completion {
     [self setHighlighted:highlighted animated:animated duration:0.3 completion:completion];
 }
 
-- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated duration:(NSTimeInterval)duration completion:(void(^)(BOOL finished))completion {
+- (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated duration:(NSTimeInterval)duration completion:(nullable void(^)(BOOL finished))completion {
     [UIView animateWithDuration:duration animations:^{
         if (highlighted) {
             self.layer.borderWidth = 1.0;
