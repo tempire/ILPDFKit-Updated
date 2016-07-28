@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import "ILPDFFormSignatureField.h"
+#import <ILPDFKit/ILPDFKit.h>
 
 @implementation ILPDFFormSignatureField
 
@@ -30,7 +31,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = ILPDFWidgetColor;
+        self.backgroundColor = [ILPDFWidgetColor colorWithAlphaComponent:1];
         
         [self initializeControls];
     }

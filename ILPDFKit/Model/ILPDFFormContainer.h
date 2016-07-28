@@ -122,6 +122,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)formXML;
 
 
+- (BOOL)hasForms;
+
 @end
 
 
