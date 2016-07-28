@@ -261,6 +261,10 @@
     } else if (self.formType == ILPDFFormTypeButton) {
        [ILPDFFormButtonField drawWithRect:rect context:ctx back:NO selected:[self.value isEqualToString:self.exportValue] && (_flags & ILPDFFormFlagButtonPushButton) == 0 radio:(_flags & ILPDFFormFlagButtonRadio) > 0];
     }
+    else if (self.formType == ILPDFFormTypeSignature) {
+       [PDFFormSignatureField drawWithRect:rect context:ctx value:self.value];
+    }
+
 }
 
 
