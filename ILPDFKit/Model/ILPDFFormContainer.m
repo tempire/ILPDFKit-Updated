@@ -271,7 +271,7 @@
 }
 
 - (BOOL)hasForms {
-  return _allForms.count > 0
+  return _allForms.count > 0;
 }
 
 @end
