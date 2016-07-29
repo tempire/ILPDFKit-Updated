@@ -24,6 +24,10 @@
 
 @class ILPDFWidgetAnnotationView;
 
+@protocol ILPDFViewDelegate <NSObject>
+-(void)formsLoaded;
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 
 /** The ILPDFView class allows for viewing a PDF file. The controller ILPDFViewController uses ILPDFView as its view and ILPDFDocument as its model.
@@ -44,6 +48,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) UIWebView *pdfView;
 
+/**
+ Delegate for knowing when webview is finished loading forms
+ */
+@property (nonatomic, weak, nullable) id <ILPDFViewDelegate> delegate;
 
 /**---------------------------------------------------------------------------------------
   @name Creating an ILPDFView

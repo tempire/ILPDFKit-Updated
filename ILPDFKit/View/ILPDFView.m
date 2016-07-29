@@ -128,6 +128,8 @@
         }
     }
     [_pdfDocument.forms updateWidgetAnnotationViews:_pdfPages views:_pdfWidgetAnnotationViews pdfView:self];
+
+    [_delegate formsLoaded];
 }
 
 

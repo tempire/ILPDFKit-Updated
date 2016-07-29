@@ -31,6 +31,9 @@
 @class ILPDFView;
 @class ILPDFDocument;
 
+@protocol ILPDFViewDelegate <NSObject>
+-(void)formsLoaded;
+@end
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -50,6 +53,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable) IBInspectable NSString *pdfName;
 
+/**
+ Delegate for knowing when webview is finished loading forms
+ */
+@property (nonatomic, weak, nullable) id <ILPDFViewDelegate> delegate;
 
 /**---------------------------------------------------------------------------------------
  * @name Reloading Content
