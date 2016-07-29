@@ -64,6 +64,7 @@
 - (void)loadPDFView {
     [_pdfView removeFromSuperview];
     _pdfView = [[ILPDFView alloc] initWithDocument:_document];
+    _pdfView.delegate = _delegate;
     [self.view addSubview:_pdfView];
 }
 
