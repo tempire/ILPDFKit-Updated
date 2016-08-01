@@ -116,6 +116,9 @@
 #pragma mark - PDF Page Views
 
 - (void)updatePDFPageViews {
+    // Sort subviews by y-index, so that NSMapTable does not overwrite values
+    UIView *subviews = [_uiWebPDFView.subviews sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"layer.position.y" ascending:YES]]];
+
     for (UIView *sv in _uiWebPDFView.subviews) {
         if ([NSStringFromClass(sv.class) isEqualToString:@"UIPDFPageView"]) {
             if ([[[_pdfPages objectEnumerator] allObjects] containsObject:sv]) continue;
@@ -123,7 +126,7 @@
             if (![_pageYValues containsObject:@(yVal)]) {
                 [_pageYValues addObject:@(yVal)];
             }
-            [_pageYValues sortUsingSelector:@selector(compare:)];
+            //[_pageYValues sortUsingSelector:@selector(compare:)];
             [_pdfPages setObject:sv forKey:@([_pageYValues indexOfObject:@(yVal)]+1)];
         }
     }
@@ -141,6 +144,12 @@
             break;
         }
     }
+
+    // All subviews need to be loaded, so that we know all the forms available
+    // View must be examined instead of PDF rects, because PDF does not know
+    // about UIWebView offsets
+    webView.scrollView.contentOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.size.height);
+    webView.scrollView.contentOffset = CGPointMake(0, 0);
 
     [self updatePDFPageViews];
     [_delegate formsLoaded];
