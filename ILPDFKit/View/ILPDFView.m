@@ -59,6 +59,7 @@
 
         _pdfView = [[UIWebView alloc] initWithFrame:self.bounds];
         [_pdfView.scrollView setContentInset:UIEdgeInsetsMake(0, 0, self.bounds.size.height/2, 0)];
+        _pdfView.suppressesIncrementalRendering = YES;
         _pdfView.scalesPageToFit = YES;
         _pdfView.scrollView.delegate = self;
         _pdfView.scrollView.bouncesZoom = NO;
@@ -119,7 +120,7 @@
     // Sort subviews by y-index, so that NSMapTable does not overwrite values
     UIView *subviews = [_uiWebPDFView.subviews sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"layer.position.y" ascending:YES]]];
 
-    for (UIView *sv in _uiWebPDFView.subviews) {
+    for (UIView *sv in subviews) {
         if ([NSStringFromClass(sv.class) isEqualToString:@"UIPDFPageView"]) {
             if ([[[_pdfPages objectEnumerator] allObjects] containsObject:sv]) continue;
             NSUInteger yVal = (NSUInteger)floor(sv.frame.origin.y);
