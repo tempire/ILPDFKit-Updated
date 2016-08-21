@@ -69,7 +69,7 @@
 }
 
 -(void)didLoadPDFView:(ILPDFView *)pdfView {
-    [self.delegate didLoadPDFViewController:self formsWithEstimatedFrames:pdfView.pdfWidgetAnnotationViews];
+    [self.delegate didLoadPDFViewController:self formContainer:_document.forms];
 }
 
 

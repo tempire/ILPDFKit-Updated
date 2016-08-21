@@ -234,10 +234,6 @@
         ILPDFWidgetAnnotationView *add = nil;
         if ([form associatedWidget] == nil) {
             
-            if ([form.name isEqualToString:@"Signature1"]) {
-                NSLog(@"NO ASSOCIATED WIDGET %@", form.name);
-            }
-            
             add = [form createWidgetAnnotationViewForPageView:pageView estimatedPageFrame:pageFrame];
             add.page = form.page;
             wasAdded = YES;
@@ -249,15 +245,7 @@
             add = [form associatedWidget];
         }
 
-        if ([form.name isEqualToString:@"Signature1"]) {
-            NSLog(@"ZERO LOOP %@", form.name);
-        }
-        
         if (add.superview == nil && ![add isKindOfClass:[ILPDFFormChoiceField class]]) {
-            
-            if ([form.name isEqualToString:@"Signature1"]) {
-                NSLog(@"FIRST LOOP %@", form.name);
-            }
             
             [pdfView.pdfView.scrollView addSubview:add];
             add.parentView = pdfView;
@@ -269,7 +257,9 @@
 
     if (wasAdded) {
         [views sortUsingComparator:^NSComparisonResult(ILPDFWidgetAnnotationView *obj1, ILPDFWidgetAnnotationView *obj2) {
-            if ( obj1.baseFrame.origin.y > obj2.baseFrame.origin.y) return NSOrderedAscending;
+            //if ( obj1.baseFrame.origin.y > obj2.baseFrame.origin.y) return NSOrderedAscending;
+            if ( obj1.baseFrame.origin.y > obj2.baseFrame.origin.y && obj1.baseFrame.origin.x > obj2.baseFrame.origin.x ) return NSOrderedAscending;
+
             else return NSOrderedDescending;
         }];
 
@@ -282,26 +272,16 @@
     }
 
      for (ILPDFForm *form in self) {
-            if ([form.name isEqualToString:@"Signature1"]) {
-                NSLog(@"SECOND LOOP %@", form.name);
-            }
          
          UIView *pageView = (UIView *)[pageViews objectForKey: @(form.page)];
          //if (pageView == nil) continue;
+         
          if (pageView && pageView.superview) {
-            if ([form.name isEqualToString:@"Signature1"]) {
-                NSLog(@"INSIDE SECOND LOOP %@", form.name);
-            }
-             
              [form updateFrameForPDFPageView:pageView];
          }
          else {
-            if ([form.name isEqualToString:@"Signature1"]) {
-                NSLog(@"INSIDE SECOND LOOP 2 %@", form.name);
-            }
              // Estimate frame, because pdfPage has not been created because UIWebView only creates the PDF page once you've scrolled to it
              UIView *firstPageView = (UIView *)[pageViews objectForKey: @(1)];
-             [form updateFrameWithEstimatedPageFrame: firstPageView.frame];
          }
      }
 }

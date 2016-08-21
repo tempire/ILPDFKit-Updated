@@ -29,12 +29,11 @@
         [self.navigationController pushDetailViewController:pdfViewController animated:YES];
  */
 
-@class ILPDFView;
-@class ILPDFDocument;
 @class ILPDFViewController;
+@class ILPDFFormContainer;
 
 @protocol ILPDFViewControllerDelegate <NSObject>
--(void)didLoadPDFViewController:(ILPDFViewController * _Nonnull)viewController formsWithEstimatedFrames:(NSArray * _Nonnull)forms;
+-(void)didLoadPDFViewController:(ILPDFViewController * _Nonnull)viewController formContainer:(ILPDFFormContainer * _Nonnull)formContainer;
 @end
 
 NS_ASSUME_NONNULL_BEGIN

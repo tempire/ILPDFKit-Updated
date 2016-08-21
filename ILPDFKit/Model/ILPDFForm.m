@@ -276,16 +276,7 @@
 
 - (void)updateFrameWithEstimatedPageFrame:(CGRect)pageFrame {
     if (CGRectEqualToRect(pageFrame, CGRectZero)) {
-        NSLog(@"EQUAL");
         return;
-    }
-    
-    switch (_formType) {
-        case ILPDFFormTypeSignature:
-            NSLog(@"CCC");
-            
-        default:
-            break;
     }
     
     CGFloat vwidth = pageFrame.size.width;
@@ -297,21 +288,9 @@
     [_formUIElement updateWithZoom:_formUIElement.zoomScale];
     
     _formUIElement.frame = _uiBaseFrame;
-    
-    if ([_name isEqualToString:@"Signature1"]) {
-        NSLog(@"INSIDE updateFrameWithEstimatedPageFrame");
-    }
 }
 
 - (void)updateFrameForPDFPageView:(UIView *)pdfPage {
-    
-    switch (_formType) {
-        case ILPDFFormTypeSignature:
-            NSLog(@"EEE");
-            
-        default:
-            break;
-    }
     
     CGFloat vwidth = pdfPage.bounds.size.width;
     CGRect correctedFrame = CGRectMake(_frame.origin.x-_cropBox.origin.x, _cropBox.size.height-_frame.origin.y-_frame.size.height-_cropBox.origin.y, _frame.size.width, _frame.size.height);
@@ -320,10 +299,6 @@
     _uiBaseFrame = [pdfPage convertRect:_pageFrame toView:pdfPage.superview];
     
     [_formUIElement updateWithZoom:_formUIElement.zoomScale];
-    
-    if ([_name isEqualToString:@"Signature1"]) {
-        NSLog(@"INSIDE updateFrameForPDFPageView");
-    }
     
     _formUIElement.frame = _uiBaseFrame;
 
@@ -338,14 +313,6 @@
 
     if (_formUIElement) {
         _formUIElement = nil;
-    }
-    
-    switch (_formType) {
-        case ILPDFFormTypeSignature:
-            NSLog(@"DDD");
-            
-        default:
-            break;
     }
     
     if (pageView && pageView.superview) {
