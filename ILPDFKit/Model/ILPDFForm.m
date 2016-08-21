@@ -274,23 +274,62 @@
 }
 
 
+- (void)updateFrameWithEstimatedPageFrame:(CGRect)pageFrame {
+    if (CGRectEqualToRect(pageFrame, CGRectZero)) {
+        NSLog(@"EQUAL");
+        return;
+    }
+    
+    switch (_formType) {
+        case ILPDFFormTypeSignature:
+            NSLog(@"CCC");
+            
+        default:
+            break;
+    }
+    
+    CGFloat vwidth = pageFrame.size.width;
+    CGRect correctedFrame = CGRectMake(_frame.origin.x-_cropBox.origin.x, _cropBox.size.height-_frame.origin.y-_frame.size.height-_cropBox.origin.y, _frame.size.width, _frame.size.height);
+    CGFloat factor = vwidth/_cropBox.size.width;
+    _pageFrame =  CGRectIntegral(CGRectMake(correctedFrame.origin.x*factor, correctedFrame.origin.y*factor, correctedFrame.size.width*factor, correctedFrame.size.height*factor));
+    
+    _uiBaseFrame = CGRectOffset(_pageFrame, pageFrame.origin.x, ((_page) * pageFrame.origin.y) + (_page - 1) * pageFrame.size.height);
+    [_formUIElement updateWithZoom:_formUIElement.zoomScale];
+    
+    _formUIElement.frame = _uiBaseFrame;
+    
+    if ([_name isEqualToString:@"Signature1"]) {
+        NSLog(@"INSIDE updateFrameWithEstimatedPageFrame");
+    }
+}
+
 - (void)updateFrameForPDFPageView:(UIView *)pdfPage {
-
-
+    
+    switch (_formType) {
+        case ILPDFFormTypeSignature:
+            NSLog(@"EEE");
+            
+        default:
+            break;
+    }
+    
     CGFloat vwidth = pdfPage.bounds.size.width;
     CGRect correctedFrame = CGRectMake(_frame.origin.x-_cropBox.origin.x, _cropBox.size.height-_frame.origin.y-_frame.size.height-_cropBox.origin.y, _frame.size.width, _frame.size.height);
     CGFloat factor = vwidth/_cropBox.size.width;
     _pageFrame =  CGRectIntegral(CGRectMake(correctedFrame.origin.x*factor, correctedFrame.origin.y*factor, correctedFrame.size.width*factor, correctedFrame.size.height*factor));
     _uiBaseFrame = [pdfPage convertRect:_pageFrame toView:pdfPage.superview];
-
-    _formUIElement.frame = _uiBaseFrame;
+    
     [_formUIElement updateWithZoom:_formUIElement.zoomScale];
+    
+    if ([_name isEqualToString:@"Signature1"]) {
+        NSLog(@"INSIDE updateFrameForPDFPageView");
+    }
+    
+    _formUIElement.frame = _uiBaseFrame;
 
 }
 
-- (ILPDFWidgetAnnotationView *)createWidgetAnnotationViewForPageView:(UIView *)pageView {
-
-
+- (ILPDFWidgetAnnotationView *)createWidgetAnnotationViewForPageView:(UIView *)pageView estimatedPageFrame:(CGRect)pageFrame {
 
     if ((_annotFlags & ILPDFAnnotationFlagHidden) > 0) return nil;
     if ((_annotFlags & ILPDFAnnotationFlagInvisible) > 0) return nil;
@@ -300,7 +339,21 @@
     if (_formUIElement) {
         _formUIElement = nil;
     }
-    [self updateFrameForPDFPageView:pageView];
+    
+    switch (_formType) {
+        case ILPDFFormTypeSignature:
+            NSLog(@"DDD");
+            
+        default:
+            break;
+    }
+    
+    if (pageView && pageView.superview) {
+        [self updateFrameForPDFPageView:pageView];
+    }
+    else {
+        [self updateFrameWithEstimatedPageFrame:pageFrame];
+    }
 
     switch (_formType) {
         case ILPDFFormTypeText:

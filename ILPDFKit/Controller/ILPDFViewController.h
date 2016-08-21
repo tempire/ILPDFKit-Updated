@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
+#import "ILPDFView.h"
 
 /**The ILPDFViewController class allows for convienient viewing  of a PDF document using a UIViewController subclass. It represents the controller that renders a PDF using its view (ILPDFView) with data from its model (ILPDFDocument). Displaying a PDF file is very simple using ILPDFViewController.
  
@@ -30,14 +31,15 @@
 
 @class ILPDFView;
 @class ILPDFDocument;
+@class ILPDFViewController;
 
-@protocol ILPDFViewDelegate <NSObject>
--(void)formsLoaded;
+@protocol ILPDFViewControllerDelegate <NSObject>
+-(void)didLoadPDFViewController:(ILPDFViewController * _Nonnull)viewController formsWithEstimatedFrames:(NSArray * _Nonnull)forms;
 @end
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ILPDFViewController : UIViewController
+@interface ILPDFViewController : UIViewController <ILPDFViewDelegate>
 
 /** The ILPDFDocument that represents the model for the ILPDFViewController.
     You must set this property so a document is displayed.
@@ -56,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Delegate for knowing when webview is finished loading forms
  */
-@property (nonatomic, weak, nullable) id <ILPDFViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id <ILPDFViewControllerDelegate> delegate;
 
 /**---------------------------------------------------------------------------------------
  * @name Reloading Content

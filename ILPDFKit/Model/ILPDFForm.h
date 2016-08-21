@@ -227,10 +227,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Returns a view to represent the form.
  
+ Accepts either page view or page frame. If no page view, page frame used to estimate the initial frame.
  @param vwidth The width of the superview bounds.
  @return A new view representing the form.
+ 
  */
-- (ILPDFWidgetAnnotationView *)createWidgetAnnotationViewForPageView:(UIView *)pageView;
+- (ILPDFWidgetAnnotationView *)createWidgetAnnotationViewForPageView:(UIView *)pageView estimatedPageFrame:(CGRect)pageFrame;
 
 /**---------------------------------------------------------------------------------------
  * @name KVO
@@ -261,6 +263,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)updateFrameForPDFPageView:(UIView *)pdfPage;
 
+/**
+ Update frames with estimates based on expected page frame
+ */
+- (void)updateFrameWithEstimatedPageFrame:(CGRect)pageFrame;
+    
 @end
 
 NS_ASSUME_NONNULL_END

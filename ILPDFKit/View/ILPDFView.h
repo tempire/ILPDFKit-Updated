@@ -23,9 +23,11 @@
 #import <UIKit/UIKit.h>
 
 @class ILPDFWidgetAnnotationView;
+@class ILPDFView;
+@class ILPDFDocument;
 
 @protocol ILPDFViewDelegate <NSObject>
--(void)formsLoaded;
+- (void) didLoadPDFView:(ILPDFView * _Nonnull)pdfView;
 @end
 
 NS_ASSUME_NONNULL_BEGIN
@@ -51,7 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Delegate for knowing when webview is finished loading forms
  */
-@property (nonatomic, weak, nullable) id <ILPDFViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id<ILPDFViewDelegate> delegate;
 
 /**---------------------------------------------------------------------------------------
   @name Creating an ILPDFView

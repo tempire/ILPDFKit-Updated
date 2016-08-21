@@ -120,15 +120,23 @@
     // Sort subviews by y-index, so that NSMapTable does not overwrite values
     UIView *subviews = [_uiWebPDFView.subviews sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:@"layer.position.y" ascending:YES]]];
 
+    // If scroll is too fast, UIWebView will not have all subviews in it. It will drop the beginning ones
+    // Use tag. First page = 1000000, second page = 10000001, etc
+    
     for (UIView *sv in subviews) {
+        
         if ([NSStringFromClass(sv.class) isEqualToString:@"UIPDFPageView"]) {
             if ([[[_pdfPages objectEnumerator] allObjects] containsObject:sv]) continue;
-            NSUInteger yVal = (NSUInteger)floor(sv.frame.origin.y);
-            if (![_pageYValues containsObject:@(yVal)]) {
-                [_pageYValues addObject:@(yVal)];
-            }
+            
+            NSUInteger pageIndex = sv.tag - 1000000 + 1;
+            //NSUInteger yVal = (NSUInteger)floor(sv.frame.origin.y);
+            //if (![_pageYValues containsObject:@(yVal)]) {
+            //    [_pageYValues addObject:@(yVal)];
+            //}
             //[_pageYValues sortUsingSelector:@selector(compare:)];
-            [_pdfPages setObject:sv forKey:@([_pageYValues indexOfObject:@(yVal)]+1)];
+            //[_pdfPages setObject:sv forKey:@([_pageYValues indexOfObject:@(yVal)]+1)];
+            
+            [_pdfPages setObject:sv forKey:@(pageIndex)];
         }
     }
     [_pdfDocument.forms updateWidgetAnnotationViews:_pdfPages views:_pdfWidgetAnnotationViews pdfView:self];
@@ -149,11 +157,11 @@
     // All subviews need to be loaded, so that we know all the forms available
     // View must be examined instead of PDF rects, because PDF does not know
     // about UIWebView offsets
-    webView.scrollView.contentOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.size.height);
-    webView.scrollView.contentOffset = CGPointMake(0, 0);
+    //webView.scrollView.contentOffset = CGPointMake(0, webView.scrollView.contentSize.height - webView.scrollView.bounds.size.height);
+    //webView.scrollView.contentOffset = CGPointMake(0, 0);
 
     [self updatePDFPageViews];
-    [_delegate formsLoaded];
+    [self.delegate didLoadPDFView:self];
 
     for (ILPDFWidgetAnnotationView *element in _pdfWidgetAnnotationViews) {
         element.alpha = 0;

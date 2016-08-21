@@ -64,10 +64,13 @@
 - (void)loadPDFView {
     [_pdfView removeFromSuperview];
     _pdfView = [[ILPDFView alloc] initWithDocument:_document];
-    _pdfView.delegate = _delegate;
+    _pdfView.delegate = self;
     [self.view addSubview:_pdfView];
 }
 
+-(void)didLoadPDFView:(ILPDFView *)pdfView {
+    [self.delegate didLoadPDFViewController:self formsWithEstimatedFrames:pdfView.pdfWidgetAnnotationViews];
+}
 
 
 @end
